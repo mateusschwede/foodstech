@@ -1,6 +1,18 @@
 <?php
     require_once '../conect.php';
     session_start();
+
+    if(!empty($_POST['nome'])) {
+        if($_POST['nome']=="admin") {
+            $_SESSION['msg'] = "<br><div class='alert alert-danger alert-dismissible fade show' role='alert'>Atendente <b>admin</b> não é válido!<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>";
+            header("location: atendentes.php");
+        } else {
+            $r = $db->prepare("INSERT INTO atendente(nome) VALUES (?)");
+            $r->execute(array($_POST['nome']));
+            $_SESSION['msg'] = "<br><div class='alert alert-success alert-dismissible fade show' role='alert'>Atendente adicionado!<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>";
+            header("location: atendentes.php");
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -40,27 +52,14 @@
 
     <div class="row">
         <div class="col-sm-12">
-            <h1>Atendentes</h1>
-            <?if($_SESSION['msg']!=null){echo $_SESSION['msg'];$_SESSION['msg']=null;}?>
-            <a href="addAtendente.php" class="btn btn-dark btn-sm">Adicionar</a>
-            <br><br>
-            <h3>Ativos</h3>
-            <?php
-                $r = $db->query("SELECT * FROM atendente WHERE ativo=1 ORDER BY nome");
-                $linhas = $r->fetchAll(PDO::FETCH_ASSOC);
-                foreach($linhas as $l) {
-                    echo "<p>".$l['nome']." <small>(Cod ".$l['id'].")</small> <a href='edAtendente.php?id=".base64_encode($l['id'])."' class='btn btn-warning btn-sm'>Editar</a> <a href='inatAtendente.php?id=".base64_encode($l['id'])."' class='btn btn-danger btn-sm'>Inativar</a></p><hr>";
-                }
-            ?>
-            <br>
-            <h3>Inativos</h3>
-            <?php
-                $r = $db->query("SELECT * FROM atendente WHERE ativo=0 ORDER BY nome");
-                $linhas = $r->fetchAll(PDO::FETCH_ASSOC);
-                foreach($linhas as $l) {
-                    echo "<p class='text-muted'>".$l['nome']." <small>(Cod ".$l['id'].")</small> <a href='atAtendente.php?id=".base64_encode($l['id'])."' class='btn btn-success btn-sm'>Ativar</a></p><hr>";
-                }
-            ?>
+            <h1>Novo atendente</h1>
+            <form action="addAtendente.php" method="post">
+                <div class="form-group">
+                    <input type="text" class="form-control" required name="nome" placeholder="nome" maxlength="50" style="text-transform: lowercase;">
+                </div>
+                <button class="btn btn-danger" onclick="window.location.href='atendentes.php'">Cancelar</button>
+                <button type="submit" class="btn btn-success">Adicionar</button>
+            </form>
         </div>
     </div>
 
