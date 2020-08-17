@@ -59,3 +59,22 @@ PEDIDO
 USUÁRIOS
 - Atendente: abre comanda, faz pedidos, vê pedidos de suas comandas abertas
 - Admin: fecha comanda, cancela comanda, histórico comandas, vê pedidos comandas abertas e fechadas, crud itens, crud atendentes
+
+--- ADMIN ---
+Atendetes:
+- addAtendente
+- edAtendente
+- verAtendentes
+- ativar/inativarAtendente
+
+Itens:
+- AddItem
+- edItem
+- verItens
+- ativar/inativarItem
+
+Comandas:
+em breve...
+
+Pedidos:
+em breve...
