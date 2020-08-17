@@ -1,6 +1,7 @@
 <?php
     require_once '../conect.php';
     session_start();
+    if((empty($_SESSION['id'])) or (empty($_SESSION['nome']))) {header("location: ../index.php");}
 
     if(!empty($_POST['nome'])) {
         if($_POST['nome']=="admin") {
