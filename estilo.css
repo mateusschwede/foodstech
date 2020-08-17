@@ -4,6 +4,7 @@ LOGO: <img src="https://img.icons8.com/pastel-glyph/64/000000/dining-room.png"/>
 
 /* GERAL */
 #menu {padding: 0%;}
+#logout {color: red;}
 
 /* OFFLINE */
 #offline {text-align: center; padding: 30px;}
