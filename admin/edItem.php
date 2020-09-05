@@ -3,10 +3,15 @@
     session_start();
     if((empty($_SESSION['id'])) or (empty($_SESSION['nome']))) {header("location: ../index.php");}
 
-    if(!empty($_POST['nome'])) {
-        $r = $db->prepare("INSERT INTO item(nome,preco) VALUES (?,?)");
-        $r->execute(array($_POST['nome'],$_POST['preco']));
-        $_SESSION['msg'] = "<br><div class='alert alert-success alert-dismissible fade show' role='alert'>Item adicionado!<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>";
+    $r = $db->prepare("SELECT * FROM item WHERE id=?");
+    $r->execute(array(base64_decode($_GET['id'])));
+    $linhas = $r->fetchAll(PDO::FETCH_ASSOC);
+    foreach($linhas as $l) {$nome = $l['nome']; $preco = $l['preco'];}
+
+    if((!empty($_GET['idVelho']) and (!empty($_POST['nome2'])) and (!empty($_POST['preco2'])))) {
+        $r = $db->prepare("UPDATE item SET nome=?, preco=? WHERE id=?");
+        $r->execute(array($_POST['nome2'],$_POST['preco2'],$_GET['idVelho']));
+        $_SESSION['msg'] = "<br><div class='alert alert-success alert-dismissible fade show' role='alert'>Item atualizado!<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>";
         header("location: itens.php");
     }
 ?>
@@ -48,16 +53,16 @@
 
     <div class="row">
         <div class="col-sm-12">
-            <h1>Novo item</h1>
-            <form action="addItem.php" method="post">
+            <h1>Editar item</h1>
+            <form action="edItem.php?idVelho=<?=base64_decode($_GET['id'])?>" method="post">
                 <div class="form-group">
-                    <input type="text" class="form-control" required name="nome" placeholder="nome" maxlength="50" style="text-transform: lowercase;">
+                    <input type="text" class="form-control" required name="nome2" placeholder="nome" maxlength="50" style="text-transform: lowercase;" value="<?=$nome?>">
                 </div>
                 <div class="form-group">
-                    <input type="number" class="form-control" required name="preco" lang="en" min=0 max=9999 step="0.01" placeholder="preço (R$ xx.xx)">
+                    <input type="number" class="form-control" required name="preco2" lang="en" min=0 max=9999 step="0.01" placeholder="preço (R$ xx.xx)" value="<?=$preco?>">
                 </div>
                 <button type="button" class="btn btn-danger" onclick="window.location.href='itens.php'">Cancelar</button>
-                <button type="submit" class="btn btn-success">Adicionar</button>
+                <button type="submit" class="btn btn-success">Atualizar</button>
             </form>
         </div>
     </div>
