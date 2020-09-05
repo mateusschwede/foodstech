@@ -2,6 +2,18 @@
     require_once '../conect.php';
     session_start();
     if((empty($_SESSION['id'])) or (empty($_SESSION['nome']))) {header("location: ../index.php");}
+
+    if(!empty($_POST['id'])) {
+
+        $r = $db->prepare("SELECT id FROM mesa WHERE id=?");
+        $r->execute(array($_POST['id']));
+        if($r->rowCount()==0) {
+            $r = $db->prepare("INSERT INTO mesa(id) VALUES (?)");
+            $r->execute(array($_POST['id']));
+            $_SESSION['msg'] = "<br><div class='alert alert-success alert-dismissible fade show' role='alert'>Mesa adicionada!<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>";
+            header("location: mesas.php");
+        } else {$_SESSION['msg'] = "<br><div class='alert alert-danger alert-dismissible fade show' role='alert'>Mesa já existente!<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>"; header("location: mesas.php");}
+    }
 ?>
 
 <!DOCTYPE html>
@@ -29,8 +41,8 @@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
-                        <a class="nav-link active" href="index.php">Home</a>
-                        <a class="nav-link" href="atendentes.php">Atendentes</a>
+                        <a class="nav-link" href="index.php">Home</a>
+                        <a class="nav-link active" href="atendentes.php">Atendentes</a>
                         <a class="nav-link" href="itens.php">Itens</a>
                         <a class="nav-link" href="mesas.php">Mesas</a>
                         <a class="nav-link" href="../logout.php" id="logout">Logout</a>
@@ -42,23 +54,14 @@
 
     <div class="row">
         <div class="col-sm-12">
-            <span id="x"></span>
-            - btnHistorico
-                DASHBOARD(análise de dados)
-                - nº e valorTotal de comandas (abertas / fechadas) por data(dtFechamento) -> Lucro do dia...
-                - valor total de comandas (abertas / fechadas)
-                - nº e valorTotal de comandas por mesa
-                - nº e valorTotal de comandas por atendente
-                - nº e valorTotal de comandas por cpf
-                - qtdTotal de saídas itemX
-                - comanda mais cara/barata
-                - comanda com mais pedidos(id e qtdPedidos)
-                - mês com mais lucro (por total / por ano)
-                - mês com menos lucro (por total / por ano)
-
-            - MESA X("ñ há comanda aberta", "comanda aberta -btnVerPedidos -btnFecharComanda -btnCancelarComanda")
-            - MESA X("ñ há comanda aberta", "comanda aberta -btnVerPedidos")
-            - MESA X("ñ há comanda aberta", "comanda aberta -btnVerPedidos")
+            <h1>Nova mesa</h1>
+            <form action="addMesa.php" method="post">
+                <div class="form-group">
+                    <input type="number" class="form-control" required name="id" min=1 max=9999 placeholder="número">
+                </div>
+                <button type="button" class="btn btn-danger" onclick="window.location.href='mesas.php'">Cancelar</button>
+                <button type="submit" class="btn btn-success">Adicionar</button>
+            </form>
         </div>
     </div>
 
@@ -66,12 +69,3 @@
 </div>
 </body>
 </html>
-
-<script type="text/javascript">	
-var t = 60;
-var t2 = setInterval(function(){
-    document.getElementById("x").innerHTML = "<span class='badge badge-danger'>Atualização "+t+"</span>";
-    t-=1;
-    if(t<0){clearInterval(t2); location.reload();}
-},1000);
-</script>

@@ -1,33 +1,3 @@
-MESA
-id (ñ auto_increment)
-
-ATENDENTE
-id
-nome
-
-ITEM
-id
-nome
-preco
-
-COMANDA(pedido)
-id
-dtAbertura
-dtFechamento
-idMesa
-totComanda
-idAtendente
-cpfCliente
-
-PEDIDO (comanda_item)
-id
-idComanda
-idItem
-qtdItem
-total
-
-
-
 FULANO CHEGOU
 Abre comanda (vem atendente, mesa x, abre comanda)
 Pede itens (item tal, 2 deles, valor do talx2)
@@ -57,24 +27,14 @@ PEDIDO
 
 
 USUÁRIOS
-- Atendente: abre comanda, faz pedidos, vê pedidos de suas comandas abertas
-- Admin: fecha comanda, cancela comanda, histórico comandas, vê pedidos comandas abertas e fechadas, crud itens, crud atendentes
-
---- ADMIN ---
-Atendetes:
-- addAtendente
-- edAtendente
-- verAtendentes
-- ativar/inativarAtendente
-
-Itens:
-- AddItem
-- edItem
-- verItens
-- ativar/inativarItem
-
-Comandas:
-em breve...
-
-Pedidos:
-em breve...
+Atendente:
+- abre comanda
+- faz pedidos
+- vê pedidos de suas comandas abertas
+Admin:
+- fecha comanda
+- cancela comanda
+- histórico comandas
+- vê pedidos de comandas abertas e fechadas
+- /crud itens
+- /crud atendentes

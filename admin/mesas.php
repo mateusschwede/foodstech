@@ -29,10 +29,10 @@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
-                        <a class="nav-link active" href="index.php">Home</a>
+                        <a class="nav-link" href="index.php">Home</a>
                         <a class="nav-link" href="atendentes.php">Atendentes</a>
                         <a class="nav-link" href="itens.php">Itens</a>
-                        <a class="nav-link" href="mesas.php">Mesas</a>
+                        <a class="nav-link active" href="mesas.php">Mesas</a>
                         <a class="nav-link" href="../logout.php" id="logout">Logout</a>
                     </div>
                 </div>
@@ -42,23 +42,17 @@
 
     <div class="row">
         <div class="col-sm-12">
-            <span id="x"></span>
-            - btnHistorico
-                DASHBOARD(análise de dados)
-                - nº e valorTotal de comandas (abertas / fechadas) por data(dtFechamento) -> Lucro do dia...
-                - valor total de comandas (abertas / fechadas)
-                - nº e valorTotal de comandas por mesa
-                - nº e valorTotal de comandas por atendente
-                - nº e valorTotal de comandas por cpf
-                - qtdTotal de saídas itemX
-                - comanda mais cara/barata
-                - comanda com mais pedidos(id e qtdPedidos)
-                - mês com mais lucro (por total / por ano)
-                - mês com menos lucro (por total / por ano)
-
-            - MESA X("ñ há comanda aberta", "comanda aberta -btnVerPedidos -btnFecharComanda -btnCancelarComanda")
-            - MESA X("ñ há comanda aberta", "comanda aberta -btnVerPedidos")
-            - MESA X("ñ há comanda aberta", "comanda aberta -btnVerPedidos")
+            <h1>Mesas</h1>
+            <?if($_SESSION['msg']!=null){echo $_SESSION['msg'];$_SESSION['msg']=null;}?>
+            <a href="addMesa.php" class="btn btn-dark btn-sm">Adicionar</a>
+            <br><br>
+            <?php
+                $r = $db->query("SELECT * FROM mesa");
+                $linhas = $r->fetchAll(PDO::FETCH_ASSOC);
+                foreach($linhas as $l) {
+                    echo "<p>Mesa ".$l['id']." <a href='edMesa.php?id=".base64_encode($l['id'])."' class='btn btn-warning btn-sm'>Editar</a> <a href='remMesa.php?id=".base64_encode($l['id'])."' class='btn btn-danger btn-sm'>Excluir</a></p><hr>";
+                }
+            ?>
         </div>
     </div>
 
@@ -66,12 +60,3 @@
 </div>
 </body>
 </html>
-
-<script type="text/javascript">	
-var t = 60;
-var t2 = setInterval(function(){
-    document.getElementById("x").innerHTML = "<span class='badge badge-danger'>Atualização "+t+"</span>";
-    t-=1;
-    if(t<0){clearInterval(t2); location.reload();}
-},1000);
-</script>
