@@ -46,11 +46,21 @@
             <?if($_SESSION['msg']!=null){echo $_SESSION['msg'];$_SESSION['msg']=null;}?>
             <a href="addMesa.php" class="btn btn-dark btn-sm">Adicionar</a>
             <br><br>
+            <h3>Ativas</h3>
             <?php
-                $r = $db->query("SELECT * FROM mesa");
+                $r = $db->query("SELECT * FROM mesa WHERE ativo=1");
                 $linhas = $r->fetchAll(PDO::FETCH_ASSOC);
                 foreach($linhas as $l) {
-                    echo "<p>Mesa ".$l['id']." <a href='edMesa.php?id=".base64_encode($l['id'])."' class='btn btn-warning btn-sm'>Editar</a> <a href='remMesa.php?id=".base64_encode($l['id'])."' class='btn btn-danger btn-sm'>Excluir</a></p><hr>";
+                    echo "<p>Mesa ".$l['id']." <a href='inatMesa.php?id=".base64_encode($l['id'])."' class='btn btn-danger btn-sm'>Inativar</a></p><hr>";
+                }
+            ?>
+            <br>
+            <h3>Inativas</h3>
+            <?php
+                $r = $db->query("SELECT * FROM mesa WHERE ativo=0");
+                $linhas = $r->fetchAll(PDO::FETCH_ASSOC);
+                foreach($linhas as $l) {
+                    echo "<p class='text-muted'>Mesa ".$l['id']." <a href='atMesa.php?id=".base64_encode($l['id'])."' class='btn btn-success btn-sm'>Ativar</a></p><hr>";
                 }
             ?>
         </div>

@@ -38,3 +38,11 @@ Admin:
 - vê pedidos de comandas abertas e fechadas
 - /crud itens
 - /crud atendentes
+
+
+
+
+
+
+======== OBSERVAÇÕES ========
+- Não pode inativar item com comanda aberta
