@@ -3,34 +3,29 @@ Abre comanda (vem atendente, mesa x, abre comanda)
 Pede itens (item tal, 2 deles, valor do talx2)
 Fecha comanda (comanda fecha, cpfTal, nf(comanda com dados, itens))
 
-
 MESA
 - CRUD mesa
 - Mesas disponíveis/ocupadas
-
 ATENDENTE
 - CRUD atendente
-
 ITEM
 - CRUD item
-
 COMANDA
 - CRUD comanda
 - Cancelar comanda
 - Fechar comanda
 - Comandas abertas
 - Histórico comandas: data/cpf/mesa/atendente
-
 PEDIDO
 - Ver comanda com os pedidos
 
 
-
 USUÁRIOS
 Atendente:
-- abre comanda
+- /abre comanda
 - faz pedidos
-- vê pedidos de suas comandas abertas
+- /vê pedidos de suas comandas abertas
+- histórico de suas comandas por dia(com pedido)
 Admin:
 - fecha comanda
 - cancela comanda
@@ -38,11 +33,17 @@ Admin:
 - vê pedidos de comandas abertas e fechadas
 - /crud itens
 - /crud atendentes
-
-
+- /crud mesas
 
 
 
 
 ======== OBSERVAÇÕES ========
 - Não pode inativar item com comanda aberta
+
+
+===== ANÁLISE DE DADOS =====
+- Mesa que mais/menos comandas teve (fazer outro com valores tbm)
+- Atendente que mais/menos vendeu
+- Mês com mais/menos lucro | Dia com mais/menos lucro
+- Cpf com mais lucro

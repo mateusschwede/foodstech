@@ -2,23 +2,6 @@
     require_once '../conect.php';
     session_start();
     if((empty($_SESSION['id'])) or (empty($_SESSION['nome']))) {header("location: ../index.php");}
-
-    $r = $db->prepare("SELECT nome FROM atendente WHERE id=?");
-    $r->execute(array(base64_decode($_GET['id'])));
-    $linhas = $r->fetchAll(PDO::FETCH_ASSOC);
-    foreach($linhas as $l) {$nome = $l['nome'];}
-
-    if((!empty($_GET['idVelho'])) and (!empty($_POST['nome2']))) {
-        if($_POST['nome2']=="admin") {
-            $_SESSION['msg'] = "<br><div class='alert alert-danger alert-dismissible fade show' role='alert'>Atendente <b>admin</b> não é válido!<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>";
-            header("location: atendentes.php");
-        } else {
-            $r = $db->prepare("UPDATE atendente SET nome=? WHERE id=?");
-            $r->execute(array($_POST['nome2'],$_GET['idVelho']));
-            $_SESSION['msg'] = "<br><div class='alert alert-success alert-dismissible fade show' role='alert'>Atendente atualizado!<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>";
-            header("location: atendentes.php");
-        }
-    }
 ?>
 
 <!DOCTYPE html>
@@ -46,12 +29,9 @@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
-                        <a class="nav-link" href="index.php">Home</a>
-                        <a class="nav-link active" href="atendentes.php">Atendentes</a>
-                        <a class="nav-link" href="itens.php">Itens</a>
-                        <a class="nav-link" href="mesas.php">Mesas</a>
+                        <a class="nav-link active" href="index.php">Home</a>
                         <a class="nav-link" href="historico.php">Histórico</a>
-                        <a class="nav-link" href="../logout.php" id="logout">Logout</a>
+                        <a class="nav-link" href="../logout.php" id="logout"><?=$_SESSION['nome']?>-logout</a>
                     </div>
                 </div>
             </nav>
@@ -60,14 +40,31 @@
 
     <div class="row">
         <div class="col-sm-12">
-            <h1>Editar atendente</h1>
-            <form action="edAtendente.php?idVelho=<?=base64_decode($_GET['id'])?>" method="post">
-                <div class="form-group">
-                    <input type="text" class="form-control" required name="nome2" placeholder="nome" maxlength="50" style="text-transform: lowercase;" value="<?=$nome?>">
-                </div>
-                <a class="btn btn-danger" onclick="window.location.href='atendentes.php'">Cancelar</a>
-                <input type="submit" class="btn btn-success" value="Atualizar">
-            </form>
+            <h1>Comanda <?=base64_decode($_GET['id'])?></h1>
+            <?php
+                $r = $db->prepare("SELECT SUM(totPedido) FROM pedido WHERE idComanda=?");
+                $r->execute(array(base64_decode($_GET['id'])));
+                $linhas = $r->fetchAll(PDO::FETCH_ASSOC);
+                foreach($linhas as $l) {echo "<h2>R$ ".number_format($l['SUM(totPedido)'],2,',','')."</h2>";}
+            ?>
+            <?if($_SESSION['msg']!=null){echo $_SESSION['msg'];$_SESSION['msg']=null;}?>
+            <a href="index.php" class="btn btn-danger btn-sm">Voltar</a>
+            <a href="addPedido.php?idComanda=<?=base64_encode(base64_decode($_GET['id']))?>" class="btn btn-dark btn-sm">Novo pedido</a>
+            <br><br>
+            <h3>Pedidos</h3>
+            <?php
+                $r = $db->prepare("SELECT * FROM pedido WHERE idComanda=? ORDER BY id");
+                $r->execute(array(base64_decode($_GET['id'])));
+                $linhas = $r->fetchAll(PDO::FETCH_ASSOC);
+                foreach($linhas as $l) {
+                    echo "<p><b>Pedido ".$l['id']."</b> <span style='color: green;'>R$".number_format($l['totPedido'],2,',','')."</span><br>";
+                    $r = $db->prepare("SELECT nome,preco FROM item WHERE id=?");
+                    $r->execute(array($l['idItem']));
+                    $linhas2 = $r->fetchAll(PDO::FETCH_ASSOC);
+                    foreach($linhas2 as $l2) {echo $l2['nome']."<small>(Unit R$".number_format($l2['preco'],2,',','').")</small> - ".$l['qtdItem']." - Tot R$".number_format(($l2['preco']*$l['qtdItem']),2,',','')." </p>";}
+                    echo "<hr>";
+                }
+            ?>
         </div>
     </div>
 

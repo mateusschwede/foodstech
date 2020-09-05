@@ -33,6 +33,7 @@
                         <a class="nav-link" href="atendentes.php">Atendentes</a>
                         <a class="nav-link" href="itens.php">Itens</a>
                         <a class="nav-link" href="mesas.php">Mesas</a>
+                        <a class="nav-link" href="historico.php">Histórico</a>
                         <a class="nav-link" href="../logout.php" id="logout">Logout</a>
                     </div>
                 </div>
