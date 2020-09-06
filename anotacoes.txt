@@ -27,7 +27,7 @@ Atendente:
 - /vê pedidos de suas comandas abertas
 - histórico de suas comandas por dia(com pedido)
 Admin:
-- fecha comanda
+- fecha comanda (comanda fechada vai pro histórico, pode gerar nf)
 - cancela comanda
 - histórico comandas
 - vê pedidos de comandas abertas e fechadas
@@ -43,7 +43,14 @@ Admin:
 
 
 ===== ANÁLISE DE DADOS =====
-- Mesa que mais/menos comandas teve (fazer outro com valores tbm)
+- Mesa que mais/menos comandas teve (informar valorTotal tbm) //média diária tbm...
+- Mês com mais/menos lucro | Dia com mais/menos lucro (por total, por ano)
+- nº e valorTotal de comandas (abertas / fechadas) por data(dtFechamento) -> Lucro do dia...
+- valor total de comandas (abertas / fechadas)
+- nº e valorTotal de comandas por atendente
 - Atendente que mais/menos vendeu
-- Mês com mais/menos lucro | Dia com mais/menos lucro
+- nº e valorTotal de comandas por cpf
 - Cpf com mais lucro
+- qtdTotal de saídas itemX
+- comanda mais cara/barata
+- comanda com mais pedidos(id e qtdPedidos)

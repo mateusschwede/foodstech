@@ -44,22 +44,29 @@
     <div class="row">
         <div class="col-sm-12">
             <span id="x"></span>
-            - btnHistorico
-                DASHBOARD(análise de dados)
-                - nº e valorTotal de comandas (abertas / fechadas) por data(dtFechamento) -> Lucro do dia...
-                - valor total de comandas (abertas / fechadas)
-                - nº e valorTotal de comandas por mesa
-                - nº e valorTotal de comandas por atendente
-                - nº e valorTotal de comandas por cpf
-                - qtdTotal de saídas itemX
-                - comanda mais cara/barata
-                - comanda com mais pedidos(id e qtdPedidos)
-                - mês com mais lucro (por total / por ano)
-                - mês com menos lucro (por total / por ano)
-
-            - MESA X("ñ há comanda aberta", "comanda aberta -btnVerPedidos -btnFecharComanda -btnCancelarComanda")
-            - MESA X("ñ há comanda aberta", "comanda aberta -btnVerPedidos")
-            - MESA X("ñ há comanda aberta", "comanda aberta -btnVerPedidos")
+            <?if($_SESSION['msg']!=null){echo $_SESSION['msg'];$_SESSION['msg']=null;}?>
+            <?php
+                $r = $db->query("SELECT * FROM comanda WHERE dtFechamento is null ORDER BY idMesa");
+                $linhas = $r->fetchAll(PDO::FETCH_ASSOC);
+                foreach($linhas as $l) {
+                    echo "
+                        <p><b>Mesa ".$l['idMesa']."</b><br>
+                        Comanda ".$l['id']." <small>(".$l['dtAbertura'].")</small><br>
+                    ";
+                    $r = $db->prepare("SELECT nome FROM atendente WHERE id=?");
+                    $r->execute(array($l['idAtendente']));
+                    $linhas2 = $r->fetchAll(PDO::FETCH_ASSOC);
+                    foreach($linhas2 as $l2) {
+                        echo "Atendente ".$l['idAtendente']."- ".$l2['nome']."</p>";
+                    }
+                    echo "
+                        <a href='cancComanda.php?id=".base64_encode($l['id'])."' class='btn btn-danger btn-sm'>Cancelar</a>
+                        <a href='pedidosComanda.php?id=".base64_encode($l['id'])."' class='btn btn-dark btn-sm'>Pedidos</a>
+                        <a href='fecharComanda.php?id=".base64_encode($l['id'])."' class='btn btn-success btn-sm'>Fechar</a>
+                        <hr>
+                    ";
+                }
+            ?>
         </div>
     </div>
 
